@@ -1,9 +1,14 @@
 from fastapi import APIRouter, HTTPException
 from pathlib import Path
 import sys
+import os
 
+# Ajustar o path para encontrar o módulo Banco_dados
 BASE_DIR = Path(__file__).resolve().parent
-sys.path.append(str(BASE_DIR / "Banco_dados"))
+# Banco_dados está em Backend/Banco_dados, então vamos um nível acima
+PARENT_DIR = BASE_DIR.parent
+sys.path.insert(0, str(PARENT_DIR))
+sys.path.insert(0, str(PARENT_DIR / "Banco_dados"))
 
 from models import Animal, Usuario, Convenio, Clinica, Veterinario, HistoricoMedico
 
@@ -12,7 +17,9 @@ router_animais = APIRouter(prefix="/animais", tags=["Animais"])
 
 @router_animais.get("/")
 def listar_animais():
-    from Banco_dados.scrips import ver_animais
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "Banco_dados"))
+    from scrips import ver_animais
     import traceback
     import os
     try:
@@ -26,7 +33,9 @@ def listar_animais():
 
 @router_animais.post("/")
 def adicionar_animal(animal: Animal):
-    from Banco_dados.scrips import inserir_animal
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "Banco_dados"))
+    from scrips import inserir_animal
     import traceback
     try:
         inserir_animal(
@@ -51,16 +60,27 @@ router_usuarios = APIRouter(prefix="/usuarios", tags=["Usuários"])
 
 @router_usuarios.get("/")
 def listar_usuarios():
-    from Banco_dados.scrips import ver_usuario
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "Banco_dados"))
+    from scrips import ver_usuario
+    import traceback
+    import os
     try:
         usuarios = ver_usuario()
         return usuarios
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erro ao listar usuários: {str(e)}")
+        error_detail = f"Erro ao listar usuários: {str(e)}"
+        if os.getenv("DEBUG", "false").lower() == "true":
+            error_detail += f"\nTraceback: {traceback.format_exc()}"
+        raise HTTPException(status_code=500, detail=error_detail)
 
 @router_usuarios.post("/")
 def adicionar_usuario(usuario: Usuario):
-    from Banco_dados.scrips import inserir_usuario
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "Banco_dados"))
+    from scrips import inserir_usuario
+    import traceback
+    import os
     try:
         inserir_usuario(
             nome=usuario.nome,
@@ -72,23 +92,37 @@ def adicionar_usuario(usuario: Usuario):
         )
         return {"mensagem": "Usuário adicionado com sucesso!", "usuario": usuario}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erro ao adicionar usuário: {str(e)}")
+        error_detail = f"Erro ao adicionar usuário: {str(e)}"
+        if os.getenv("DEBUG", "false").lower() == "true":
+            error_detail += f"\nTraceback: {traceback.format_exc()}"
+        raise HTTPException(status_code=500, detail=error_detail)
 
 # Router para Convênios
 router_convenios = APIRouter(prefix="/convenios", tags=["Convênios"])
 
 @router_convenios.get("/")
 def listar_convenios():
-    from Banco_dados.scrips import ver_convenio
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "Banco_dados"))
+    from scrips import ver_convenio
+    import traceback
+    import os
     try:
         convenios = ver_convenio()
         return convenios
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erro ao listar convênios: {str(e)}")
+        error_detail = f"Erro ao listar convênios: {str(e)}"
+        if os.getenv("DEBUG", "false").lower() == "true":
+            error_detail += f"\nTraceback: {traceback.format_exc()}"
+        raise HTTPException(status_code=500, detail=error_detail)
 
 @router_convenios.post("/")
 def adicionar_convenio(convenio: Convenio):
-    from Banco_dados.scrips import inserir_convenio
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "Banco_dados"))
+    from scrips import inserir_convenio
+    import traceback
+    import os
     try:
         inserir_convenio(
             nome=convenio.nome,
@@ -97,23 +131,37 @@ def adicionar_convenio(convenio: Convenio):
         )
         return {"mensagem": "Convênio adicionado com sucesso!", "convenio": convenio}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erro ao adicionar convênio: {str(e)}")
+        error_detail = f"Erro ao adicionar convênio: {str(e)}"
+        if os.getenv("DEBUG", "false").lower() == "true":
+            error_detail += f"\nTraceback: {traceback.format_exc()}"
+        raise HTTPException(status_code=500, detail=error_detail)
 
 # Router para Clínicas
 router_clinicas = APIRouter(prefix="/clinicas", tags=["Clínicas"])
 
 @router_clinicas.get("/")
 def listar_clinicas():
-    from Banco_dados.scrips import ver_clinica
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "Banco_dados"))
+    from scrips import ver_clinica
+    import traceback
+    import os
     try:
         clinicas = ver_clinica()
         return clinicas
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erro ao listar clínicas: {str(e)}")
+        error_detail = f"Erro ao listar clínicas: {str(e)}"
+        if os.getenv("DEBUG", "false").lower() == "true":
+            error_detail += f"\nTraceback: {traceback.format_exc()}"
+        raise HTTPException(status_code=500, detail=error_detail)
 
 @router_clinicas.post("/")
 def adicionar_clinica(clinica: Clinica):
-    from Banco_dados.scrips import inserir_clinica
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "Banco_dados"))
+    from scrips import inserir_clinica
+    import traceback
+    import os
     try:
         inserir_clinica(
             nome=clinica.nome,
@@ -124,23 +172,37 @@ def adicionar_clinica(clinica: Clinica):
         )
         return {"mensagem": "Clínica adicionada com sucesso!", "clinica": clinica}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erro ao adicionar clínica: {str(e)}")
+        error_detail = f"Erro ao adicionar clínica: {str(e)}"
+        if os.getenv("DEBUG", "false").lower() == "true":
+            error_detail += f"\nTraceback: {traceback.format_exc()}"
+        raise HTTPException(status_code=500, detail=error_detail)
 
 # Router para Veterinários
 router_veterinarios = APIRouter(prefix="/veterinarios", tags=["Veterinários"])
 
 @router_veterinarios.get("/")
 def listar_veterinarios():
-    from Banco_dados.scrips import ver_veterinario
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "Banco_dados"))
+    from scrips import ver_veterinario
+    import traceback
+    import os
     try:
         veterinarios = ver_veterinario()
         return veterinarios
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erro ao listar veterinários: {str(e)}")
+        error_detail = f"Erro ao listar veterinários: {str(e)}"
+        if os.getenv("DEBUG", "false").lower() == "true":
+            error_detail += f"\nTraceback: {traceback.format_exc()}"
+        raise HTTPException(status_code=500, detail=error_detail)
 
 @router_veterinarios.post("/")
 def adicionar_veterinario(veterinario: Veterinario):
-    from Banco_dados.scrips import inserir_veterinario
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "Banco_dados"))
+    from scrips import inserir_veterinario
+    import traceback
+    import os
     try:
         inserir_veterinario(
             nome=veterinario.nome,
@@ -152,23 +214,37 @@ def adicionar_veterinario(veterinario: Veterinario):
         )
         return {"mensagem": "Veterinário adicionado com sucesso!", "veterinario": veterinario}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erro ao adicionar veterinário: {str(e)}")
+        error_detail = f"Erro ao adicionar veterinário: {str(e)}"
+        if os.getenv("DEBUG", "false").lower() == "true":
+            error_detail += f"\nTraceback: {traceback.format_exc()}"
+        raise HTTPException(status_code=500, detail=error_detail)
 
 # Router para Histórico Médico
 router_historico = APIRouter(prefix="/historicomedico", tags=["Histórico Médico"])
 
 @router_historico.get("/")
 def listar_historico():
-    from Banco_dados.scrips import ver_historicomedico
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "Banco_dados"))
+    from scrips import ver_historicomedico
+    import traceback
+    import os
     try:
         historicos = ver_historicomedico()
         return historicos
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erro ao listar histórico médico: {str(e)}")
+        error_detail = f"Erro ao listar histórico médico: {str(e)}"
+        if os.getenv("DEBUG", "false").lower() == "true":
+            error_detail += f"\nTraceback: {traceback.format_exc()}"
+        raise HTTPException(status_code=500, detail=error_detail)
 
 @router_historico.post("/")
 def adicionar_historico(historico: HistoricoMedico):
-    from Banco_dados.scrips import inserir_historicomedico
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "Banco_dados"))
+    from scrips import inserir_historicomedico
+    import traceback
+    import os
     try:
         inserir_historicomedico(
             dataconsulta=historico.dataconsulta,
@@ -181,4 +257,7 @@ def adicionar_historico(historico: HistoricoMedico):
         )
         return {"mensagem": "Registro médico adicionado com sucesso!", "historico": historico}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erro ao adicionar registro médico: {str(e)}")
+        error_detail = f"Erro ao adicionar registro médico: {str(e)}"
+        if os.getenv("DEBUG", "false").lower() == "true":
+            error_detail += f"\nTraceback: {traceback.format_exc()}"
+        raise HTTPException(status_code=500, detail=error_detail)

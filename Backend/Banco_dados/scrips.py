@@ -29,7 +29,12 @@ def ver_convenio():
     try:
         query = "SELECT * FROM convenio WHERE ativo = 1"
         lista = db.execute(query)
-        return lista
+        return lista if lista is not None else []
+    except Exception as e:
+        # Log do erro para debug
+        import sys
+        print(f"Erro em ver_convenio: {str(e)}", file=sys.stderr)
+        raise
     finally:
         db.close()
 
