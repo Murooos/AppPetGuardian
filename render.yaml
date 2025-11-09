@@ -8,7 +8,7 @@ services:
     startCommand: cd Backend/API && python -m uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: PYTHON_VERSION
-        value: 3.11.0
+        value: 3.13.5
       - key: ORACLE_DSN
         sync: false
       - key: ORACLE_USER

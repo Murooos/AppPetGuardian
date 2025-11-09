@@ -41,7 +41,7 @@ git push origin main
 - Certifique-se de que o arquivo `runtime.txt` existe na raiz (já criado)
 - Ou configure manualmente no Render:
   - **Environment**: `Python 3`
-  - **Python Version**: `3.11.0`
+  - **Python Version**: `3.13.5`
 
 ### ✅ Verificação Rápida
 
@@ -69,7 +69,7 @@ Se o `render.yaml` não estiver funcionando, configure manualmente no painel do 
 3. Configure:
    - **Build Command**: `pip install --upgrade pip && pip install -r requirements.txt`
    - **Start Command**: `cd Backend/API && python -m uvicorn main:app --host 0.0.0.0 --port $PORT`
-   - **Python Version**: `3.11.0`
+   - **Python Version**: `3.13.5`
 
 ### 📝 Checklist
 

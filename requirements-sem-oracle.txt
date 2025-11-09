@@ -7,6 +7,7 @@ uvicorn[standard]==0.38.0
 
 # Autenticação
 PyJWT==2.10.1
+python-multipart==0.0.9
 
 # Variáveis de Ambiente
 python-dotenv==1.0.1

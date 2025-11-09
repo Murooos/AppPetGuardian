@@ -7,9 +7,15 @@ import os
 # adiciona a raiz do projeto ao path
 BASE_DIR = Path(__file__).resolve().parent
 sys.path.append(str(BASE_DIR))
-from routers import router
+from routers import (
+    router_animais,
+    router_usuarios,
+    router_convenios,
+    router_clinicas,
+    router_veterinarios,
+    router_historico
+)
 from authentic import auth_router
-from models import Animal
 
 app = FastAPI(title="API Pet Guardian", version="1.0")
 
@@ -26,7 +32,12 @@ app.add_middleware(
 )
 
 # Inclui rotas
-app.include_router(router)
+app.include_router(router_animais)
+app.include_router(router_usuarios)
+app.include_router(router_convenios)
+app.include_router(router_clinicas)
+app.include_router(router_veterinarios)
+app.include_router(router_historico)
 app.include_router(auth_router, prefix="/auth")
 
 @app.get("/")
