@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animais - Pet Guardian</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        button:hover {
+            background: #5568d3;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+        
+        .message {
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            display: none;
+        }
+        
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .link-voltar {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="link-voltar">← Voltar ao Menu</a>
+        <h1>Gerenciar Animais</h1>
+        
+        <div class="card">
+            <h2>Adicionar Animal</h2>
+            <div id="message" class="message"></div>
+            <form id="animalForm">
+                <div class="form-group">
+                    <label>Nome:</label>
+                    <input type="text" id="nome" required>
+                </div>
+                <div class="form-group">
+                    <label>Espécie:</label>
+                    <select id="especie" required>
+                        <option value="">Selecione...</option>
+                        <option value="Cão">Cão</option>
+                        <option value="Gato">Gato</option>
+                        <option value="Pássaro">Pássaro</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Raça:</label>
+                    <input type="text" id="raca">
+                </div>
+                <div class="form-group">
+                    <label>Data de Nascimento:</label>
+                    <input type="date" id="datanascimento">
+                </div>
+                <button type="submit">Adicionar</button>
+            </form>
+        </div>
+        
+        <div class="card">
+            <h2>Lista de Animais</h2>
+            <button onclick="carregarAnimais()" class="btn-secondary">Atualizar</button>
+            <div id="animaisList">
+                <p>Carregando...</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const API_URL = 'https://apppetguardian.onrender.com';
+        
+        function mostrarMensagem(texto, tipo) {
+            const msg = document.getElementById('message');
+            msg.textContent = texto;
+            msg.className = 'message ' + tipo;
+            msg.style.display = 'block';
+            setTimeout(() => msg.style.display = 'none', 5000);
+        }
+        
+        async function carregarAnimais() {
+            const div = document.getElementById('animaisList');
+            div.innerHTML = '<p>Carregando...</p>';
+            
+            try {
+                const response = await fetch(`${API_URL}/animais/`);
+                if (!response.ok) throw new Error('Erro ao carregar');
+                
+                const animais = await response.json();
+                
+                if (!animais || animais.length === 0) {
+                    div.innerHTML = '<p>Nenhum animal cadastrado.</p>';
+                    return;
+                }
+                
+                let html = '<table><tr><th>ID</th><th>Nome</th><th>Espécie</th><th>Raça</th><th>Data Nascimento</th></tr>';
+                animais.forEach(animal => {
+                    html += `<tr>
+                        <td>${animal.ID || animal.id || '-'}</td>
+                        <td>${animal.NOME || animal.nome || '-'}</td>
+                        <td>${animal.ESPECIE || animal.especie || '-'}</td>
+                        <td>${animal.RACA || animal.raca || '-'}</td>
+                        <td>${animal.DATANASCIMENTO || animal.datanascimento || '-'}</td>
+                    </tr>`;
+                });
+                html += '</table>';
+                div.innerHTML = html;
+            } catch (error) {
+                div.innerHTML = `<p style="color: red;">Erro: ${error.message}</p>`;
+            }
+        }
+        
+        document.getElementById('animalForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const data = {
+                id: Date.now(),
+                nome: document.getElementById('nome').value,
+                especie: document.getElementById('especie').value,
+                idade: 0
+            };
+            
+            try {
+                const response = await fetch(`${API_URL}/animais/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                if (!response.ok) throw new Error('Erro ao adicionar');
+                
+                mostrarMensagem('Animal adicionado com sucesso!', 'success');
+                document.getElementById('animalForm').reset();
+                carregarAnimais();
+            } catch (error) {
+                mostrarMensagem('Erro: ' + error.message, 'error');
+            }
+        });
+        
+        carregarAnimais();
+    </script>
+</body>
+</html>
+

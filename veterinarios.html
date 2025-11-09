@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veterinários - Pet Guardian</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        button:hover {
+            background: #5568d3;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .message {
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            display: none;
+        }
+        
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .link-voltar {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="link-voltar">← Voltar ao Menu</a>
+        <h1>Gerenciar Veterinários</h1>
+        
+        <div class="card">
+            <h2>Adicionar Veterinário</h2>
+            <div id="message" class="message"></div>
+            <form id="veterinarioForm">
+                <div class="form-group">
+                    <label>Nome:</label>
+                    <input type="text" id="nome" required>
+                </div>
+                <div class="form-group">
+                    <label>Telefone:</label>
+                    <input type="text" id="telefone">
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="email">
+                </div>
+                <div class="form-group">
+                    <label>Registro Profissional:</label>
+                    <input type="text" id="registroprofissional">
+                </div>
+                <div class="form-group">
+                    <label>ID Clínica:</label>
+                    <input type="number" id="clinicaid">
+                </div>
+                <div class="form-group">
+                    <label>Senha:</label>
+                    <input type="password" id="senha">
+                </div>
+                <button type="submit">Adicionar</button>
+            </form>
+        </div>
+        
+        <div class="card">
+            <h2>Lista de Veterinários</h2>
+            <button onclick="carregarVeterinarios()" class="btn-secondary">Atualizar</button>
+            <div id="veterinariosList">
+                <p>Carregando...</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const API_URL = 'https://apppetguardian.onrender.com';
+        
+        function mostrarMensagem(texto, tipo) {
+            const msg = document.getElementById('message');
+            msg.textContent = texto;
+            msg.className = 'message ' + tipo;
+            msg.style.display = 'block';
+            setTimeout(() => msg.style.display = 'none', 5000);
+        }
+        
+        async function carregarVeterinarios() {
+            const div = document.getElementById('veterinariosList');
+            div.innerHTML = '<p>Carregando...</p>';
+            
+            try {
+                const response = await fetch(`${API_URL}/veterinarios/`);
+                if (!response.ok) throw new Error('Endpoint não disponível ainda');
+                
+                const veterinarios = await response.json();
+                
+                if (!veterinarios || veterinarios.length === 0) {
+                    div.innerHTML = '<p>Nenhum veterinário cadastrado.</p>';
+                    return;
+                }
+                
+                let html = '<table><tr><th>ID</th><th>Nome</th><th>Email</th><th>Telefone</th><th>Registro</th></tr>';
+                veterinarios.forEach(vet => {
+                    html += `<tr>
+                        <td>${vet.ID || vet.id || '-'}</td>
+                        <td>${vet.NOME || vet.nome || '-'}</td>
+                        <td>${vet.EMAIL || vet.email || '-'}</td>
+                        <td>${vet.TELEFONE || vet.telefone || '-'}</td>
+                        <td>${vet.REGISTROPROFISSIONAL || vet.registroprofissional || '-'}</td>
+                    </tr>`;
+                });
+                html += '</table>';
+                div.innerHTML = html;
+            } catch (error) {
+                div.innerHTML = `<p style="color: red;">Endpoint ainda não implementado na API. Erro: ${error.message}</p>`;
+            }
+        }
+        
+        document.getElementById('veterinarioForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const data = {
+                nome: document.getElementById('nome').value,
+                telefone: document.getElementById('telefone').value,
+                email: document.getElementById('email').value,
+                registroprofissional: document.getElementById('registroprofissional').value,
+                clinicaid: document.getElementById('clinicaid').value ? parseInt(document.getElementById('clinicaid').value) : null,
+                senha: document.getElementById('senha').value
+            };
+            
+            try {
+                const response = await fetch(`${API_URL}/veterinarios/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                if (!response.ok) throw new Error('Endpoint não disponível ainda');
+                
+                mostrarMensagem('Veterinário adicionado com sucesso!', 'success');
+                document.getElementById('veterinarioForm').reset();
+                carregarVeterinarios();
+            } catch (error) {
+                mostrarMensagem('Endpoint ainda não implementado na API. Erro: ' + error.message, 'error');
+            }
+        });
+        
+        carregarVeterinarios();
+    </script>
+</body>
+</html>
+
