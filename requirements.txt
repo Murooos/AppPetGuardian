@@ -14,4 +14,3 @@ oracledb>=2.4.1
 
 # Variáveis de Ambiente
 python-dotenv==1.0.1
-
