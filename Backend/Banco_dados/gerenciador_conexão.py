@@ -5,10 +5,16 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Tentar usar o modo thick (requer Oracle Client instalado)
-# Se o Oracle Client não estiver instalado, isso falhará silenciosamente
-# e o python-oracledb usará o modo thin automaticamente
+# Permite especificar o caminho manualmente via variável de ambiente ORACLE_CLIENT_LIB_DIR
+oracle_client_path = os.getenv("ORACLE_CLIENT_LIB_DIR")
+
 try:
-    oracledb.init_oracle_client()
+    if oracle_client_path:
+        # Tentar inicializar com caminho específico
+        oracledb.init_oracle_client(lib_dir=oracle_client_path)
+    else:
+        # Tentar inicializar sem especificar caminho (procura no PATH)
+        oracledb.init_oracle_client()
 except Exception:
     pass  # Usa modo thin se o Oracle Client não estiver disponível
 
@@ -19,14 +25,21 @@ class DBHandler:
         user = os.getenv("ORACLE_USER", "SQL_NRHDYLQ3XIT2QAXIM21V7DMOZ7")
         password = os.getenv("ORACLE_PASSWORD", "<CURRENT_PASSWORD>")
         
-        self.conn = oracledb.connect(
-            user=user,
-            password=password,
-            dsn=local_dsn,
-            # Desabilitar criptografia nativa se possível
-            config_dir=None,
-            wallet_location=None
-        )
+        try:
+            self.conn = oracledb.connect(
+                user=user,
+                password=password,
+                dsn=local_dsn
+            )
+        except Exception as e:
+            error_msg = str(e)
+            if "DPY-3001" in error_msg or "Native Network Encryption" in error_msg:
+                raise Exception(
+                    "Erro: O servidor Oracle exige criptografia nativa (modo thick). "
+                    "Instale o Oracle Instant Client e configure a variável ORACLE_CLIENT_LIB_DIR no .env. "
+                    "Veja README_SETUP.md para instruções detalhadas."
+                ) from e
+            raise
         # Configurar cursor para retornar dicionários (similar ao DictCursor do MySQL)
         self.cursor = self.conn.cursor()
         # Oracle não tem DictCursor nativo, então vamos usar uma abordagem alternativa

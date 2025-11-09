@@ -5,11 +5,20 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Tentar usar o modo thick (requer Oracle Client instalado)
+# Permite especificar o caminho manualmente via variável de ambiente ORACLE_CLIENT_LIB_DIR
+oracle_client_path = os.getenv("ORACLE_CLIENT_LIB_DIR")
+
 try:
-    oracledb.init_oracle_client()
-    print("Modo thick ativado (Oracle Client detectado)")
-except Exception:
+    if oracle_client_path:
+        oracledb.init_oracle_client(lib_dir=oracle_client_path)
+        print(f"Modo thick ativado (Oracle Client encontrado em: {oracle_client_path})")
+    else:
+        oracledb.init_oracle_client()
+        print("Modo thick ativado (Oracle Client detectado no PATH)")
+except Exception as e:
     print("Modo thin ativado (Oracle Client não encontrado)")
+    if oracle_client_path:
+        print(f"Tentou usar o caminho: {oracle_client_path}")
 
 try:
     # Configuração do DSN Oracle
@@ -20,12 +29,13 @@ try:
     conn = oracledb.connect(
         user=user,
         password=password,
-        dsn=local_dsn,
-        # Desabilitar criptografia nativa se possível
-        config_dir=None,
-        wallet_location=None
+        dsn=local_dsn
     )
     print("Conexão OK!")
     conn.close()
 except Exception as e:
-    print("Erro:", e)
+    error_msg = str(e)
+    print(f"Erro: {error_msg}")
+    if "DPY-3001" in error_msg or "Native Network Encryption" in error_msg:
+        print("\n💡 Configure ORACLE_CLIENT_LIB_DIR no arquivo .env")
+        print("   Exemplo: ORACLE_CLIENT_LIB_DIR=C:\\oracle\\instantclient_21_3")

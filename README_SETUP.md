@@ -134,12 +134,25 @@ O modo thick requer o Oracle Instant Client instalado no sistema. Siga os passos
 
 2. **Instalar o Oracle Instant Client:**
    - Extraia o arquivo ZIP em um diretório (ex: `C:\oracle\instantclient_21_3`)
-   - Adicione o diretório ao PATH do sistema:
-     - Abra "Variáveis de Ambiente" no Windows
-     - Edite a variável PATH
-     - Adicione o caminho do Instant Client (ex: `C:\oracle\instantclient_21_3`)
 
-3. **Reiniciar o terminal** e testar novamente:
+3. **Configurar o Oracle Client (escolha uma opção):**
+
+   **OPÇÃO A - Adicionar ao PATH do sistema (recomendado):**
+   - Abra "Variáveis de Ambiente" no Windows
+   - Edite a variável PATH
+   - Adicione o caminho do Instant Client (ex: `C:\oracle\instantclient_21_3`)
+   - Reinicie o terminal
+
+   **OPÇÃO B - Especificar via variável de ambiente (mais fácil):**
+   - Crie ou edite o arquivo `.env` na raiz do projeto
+   - Adicione a linha:
+     ```env
+     ORACLE_CLIENT_LIB_DIR=C:\oracle\instantclient_21_3
+     ```
+   - Substitua o caminho pelo local onde você extraiu o Oracle Client
+   - Não precisa reiniciar o terminal
+
+4. **Testar a conexão:**
    ```bash
    python Backend/Banco_dados/conexao_oracle.py
    ```
@@ -173,7 +186,7 @@ Após instalar o Oracle Instant Client, execute o script de teste:
 python Backend/Banco_dados/conexao_oracle.py
 ```
 
-Se você ver a mensagem **"Modo thick ativado (Oracle Client detectado)"**, o modo thick está funcionando corretamente.
+Se você ver a mensagem **"Modo thick ativado (Oracle Client detectado)"** ou **"Modo thick ativado (Oracle Client encontrado em: ...)"**, o modo thick está funcionando corretamente.
 
 ### Nota sobre Modo Thin vs Thick
 
