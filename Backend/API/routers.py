@@ -13,15 +13,21 @@ router_animais = APIRouter(prefix="/animais", tags=["Animais"])
 @router_animais.get("/")
 def listar_animais():
     from Banco_dados.scrips import ver_animais
+    import traceback
+    import os
     try:
         animais = ver_animais()
         return animais
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erro ao listar animais: {str(e)}")
+        error_detail = f"Erro ao listar animais: {str(e)}"
+        if os.getenv("DEBUG", "false").lower() == "true":
+            error_detail += f"\nTraceback: {traceback.format_exc()}"
+        raise HTTPException(status_code=500, detail=error_detail)
 
 @router_animais.post("/")
 def adicionar_animal(animal: Animal):
     from Banco_dados.scrips import inserir_animal
+    import traceback
     try:
         inserir_animal(
             nome=animal.nome,
@@ -33,7 +39,12 @@ def adicionar_animal(animal: Animal):
         )
         return {"mensagem": "Animal adicionado com sucesso!", "animal": animal}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erro ao adicionar animal: {str(e)}")
+        error_detail = f"Erro ao adicionar animal: {str(e)}"
+        # Em desenvolvimento, incluir traceback completo
+        import os
+        if os.getenv("DEBUG", "false").lower() == "true":
+            error_detail += f"\nTraceback: {traceback.format_exc()}"
+        raise HTTPException(status_code=500, detail=error_detail)
 
 # Router para Usuários
 router_usuarios = APIRouter(prefix="/usuarios", tags=["Usuários"])

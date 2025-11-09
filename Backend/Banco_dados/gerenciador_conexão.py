@@ -52,17 +52,28 @@ class DBHandler:
         return {desc[0]: val for desc, val in zip(description, row)}
 
     def execute(self, query, params=None):
-        self.cursor.execute(query, params or ())
-        if query.strip().lower().startswith("select"):
-            rows = self.cursor.fetchall()
-            # Converter para dicionário se necessário
-            if self._dict_mode and rows:
-                description = self.cursor.description
-                return [self._row_to_dict(row, description) for row in rows]
-            return rows
-        else:
-            self.conn.commit()
-            return None
+        try:
+            # Oracle aceita dicionários diretamente para parâmetros nomeados
+            if params is None:
+                self.cursor.execute(query)
+            elif isinstance(params, dict):
+                self.cursor.execute(query, params)
+            else:
+                self.cursor.execute(query, params)
+            
+            if query.strip().lower().startswith("select"):
+                rows = self.cursor.fetchall()
+                # Converter para dicionário se necessário
+                if self._dict_mode and rows:
+                    description = self.cursor.description
+                    return [self._row_to_dict(row, description) for row in rows]
+                return rows
+            else:
+                self.conn.commit()
+                return None
+        except Exception as e:
+            self.conn.rollback()
+            raise
 
     def close(self):
         self.cursor.close()
