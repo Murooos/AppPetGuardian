@@ -1,0 +1,17 @@
+# Dependências do AppPetGuardian
+
+# Framework Web
+fastapi==0.120.4
+uvicorn[standard]==0.38.0
+
+# Autenticação
+PyJWT==2.10.1
+
+# Banco de Dados Oracle
+# Nota: Se a instalação falhar, instale o Microsoft C++ Build Tools
+# ou use: pip install oracledb (sem versão fixa para pegar a última com wheel)
+oracledb>=2.4.1
+
+# Variáveis de Ambiente
+python-dotenv==1.0.1
+

@@ -1,6 +1,8 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 import sys
+import os
 
 # adiciona a raiz do projeto ao path
 BASE_DIR = Path(__file__).resolve().parent
@@ -9,7 +11,19 @@ from routers import router
 from authentic import auth_router
 from models import Animal
 
-app = FastAPI(title="API de Exemplo", version="1.0")
+app = FastAPI(title="API Pet Guardian", version="1.0")
+
+# Configurar CORS para permitir requisições do Netlify
+# Em produção, substitua "*" pela URL específica do seu site Netlify
+allowed_origins = os.getenv("ALLOWED_ORIGINS", "*").split(",")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Inclui rotas
 app.include_router(router)
@@ -17,4 +31,8 @@ app.include_router(auth_router, prefix="/auth")
 
 @app.get("/")
 def raiz():
-    return {"mensagem": "Bem-vindo à API!"}
+    return {"mensagem": "Bem-vindo à API Pet Guardian!"}
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok", "service": "Pet Guardian API"}

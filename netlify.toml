@@ -1,0 +1,25 @@
+[build]
+  # Diretório de publicação (frontend)
+  publish = "."
+  
+  # Comando de build (se necessário)
+  # command = "npm run build"
+
+[[redirects]]
+  # Redireciona todas as rotas de API para o backend no Render
+  from = "/api/*"
+  to = "https://pet-guardian-api.onrender.com/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  # Redireciona requisições de autenticação
+  from = "/auth/*"
+  to = "https://pet-guardian-api.onrender.com/auth/:splat"
+  status = 200
+  force = true
+
+[build.environment]
+  # Variável de ambiente para a URL da API
+  REACT_APP_API_URL = "https://pet-guardian-api.onrender.com"
+

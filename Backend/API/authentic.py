@@ -3,9 +3,13 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from datetime import datetime, timedelta
 from models import Animal
 import jwt
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Chave secreta para assinar o token (em produção, use .env)
-SECRET_KEY = "minha_chave_super_secreta"
+SECRET_KEY = os.getenv("JWT_SECRET_KEY", "minha_chave_super_secreta_altere_em_producao")
 
 auth_router = APIRouter(tags=["Autenticação"])
 
