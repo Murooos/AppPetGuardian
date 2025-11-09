@@ -21,12 +21,18 @@ app = FastAPI(title="API Pet Guardian", version="1.0")
 
 # Configurar CORS para permitir requisições do Netlify
 # Em produção, substitua "*" pela URL específica do seu site Netlify
-allowed_origins = os.getenv("ALLOWED_ORIGINS", "*").split(",")
+allowed_origins_env = os.getenv("ALLOWED_ORIGINS", "*")
+if allowed_origins_env == "*":
+    allowed_origins = ["*"]
+    allow_credentials = False  # Não pode usar credentials com "*"
+else:
+    allowed_origins = [origin.strip() for origin in allowed_origins_env.split(",")]
+    allow_credentials = True
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
-    allow_credentials=True,
+    allow_credentials=allow_credentials,
     allow_methods=["*"],
     allow_headers=["*"],
 )
