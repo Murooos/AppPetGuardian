@@ -4,8 +4,21 @@ services:
     env: python
     region: oregon
     plan: free
-    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
-    startCommand: cd Backend/API && python -m uvicorn main:app --host 0.0.0.0 --port $PORT
+    buildCommand: |
+      apt-get update && apt-get install -y wget unzip libaio1 curl &&
+      pip install --upgrade pip &&
+      pip install -r requirements.txt &&
+      mkdir -p $HOME/oracle/instantclient_21_13 &&
+      cd $HOME/oracle/instantclient_21_13 &&
+      curl -L -o instantclient-basic.zip "https://download.oracle.com/otn_software/linux/instantclient/2113000/instantclient-basic-linux.x64-21.13.0.0.0dbru.zip" || \
+      (echo "⚠️  Não foi possível baixar o Oracle Client automaticamente. Configure manualmente no Render." && exit 0) &&
+      unzip -q instantclient-basic.zip && rm instantclient-basic.zip &&
+      echo "✅ Oracle Instant Client instalado em $HOME/oracle/instantclient_21_13/instantclient_21_13"
+    startCommand: |
+      cd Backend/API &&
+      export ORACLE_CLIENT_LIB_DIR=$HOME/oracle/instantclient_21_13/instantclient_21_13 &&
+      export LD_LIBRARY_PATH=$ORACLE_CLIENT_LIB_DIR:$LD_LIBRARY_PATH &&
+      python -m uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: PYTHON_VERSION
         value: 3.13.5
@@ -20,4 +33,8 @@ services:
       - key: ALLOWED_ORIGINS
         sync: false
         value: "*"  # Altere para a URL do Netlify após o deploy (ex: https://seu-site.netlify.app)
+      - key: ORACLE_CLIENT_LIB_DIR
+        value: $HOME/oracle/instantclient_21_13/instantclient_21_13
+      - key: LD_LIBRARY_PATH
+        value: $HOME/oracle/instantclient_21_13/instantclient_21_13:$LD_LIBRARY_PATH
 

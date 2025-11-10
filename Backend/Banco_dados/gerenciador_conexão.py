@@ -8,15 +8,38 @@ load_dotenv()
 # Permite especificar o caminho manualmente via variável de ambiente ORACLE_CLIENT_LIB_DIR
 oracle_client_path = os.getenv("ORACLE_CLIENT_LIB_DIR")
 
+# Tentar caminhos padrão no Render
+if not oracle_client_path:
+    # Caminhos comuns no Render
+    possible_paths = [
+        os.path.expanduser("~/oracle/instantclient_21_13/instantclient_21_13"),
+        "/opt/render/project/src/oracle/instantclient_21_13",
+        os.path.expanduser("~/oracle/instantclient_21_13"),
+    ]
+    for path in possible_paths:
+        if os.path.exists(path):
+            oracle_client_path = path
+            break
+
+thick_mode_activated = False
 try:
     if oracle_client_path:
-        # Tentar inicializar com caminho específico
-        oracledb.init_oracle_client(lib_dir=oracle_client_path)
+        # Verificar se o caminho existe
+        if os.path.exists(oracle_client_path):
+            oracledb.init_oracle_client(lib_dir=oracle_client_path)
+            thick_mode_activated = True
+        else:
+            # Tentar encontrar automaticamente
+            oracledb.init_oracle_client()
+            thick_mode_activated = True
     else:
         # Tentar inicializar sem especificar caminho (procura no PATH)
         oracledb.init_oracle_client()
-except Exception:
-    pass  # Usa modo thin se o Oracle Client não estiver disponível
+        thick_mode_activated = True
+except Exception as e:
+    # Usa modo thin se o Oracle Client não estiver disponível
+    thick_mode_activated = False
+    pass
 
 class DBHandler:
     def __init__(self):
