@@ -8,13 +8,22 @@ load_dotenv()
 # Permite especificar o caminho manualmente via variável de ambiente ORACLE_CLIENT_LIB_DIR
 oracle_client_path = os.getenv("ORACLE_CLIENT_LIB_DIR")
 
-# Tentar caminhos padrão no Render
+# Tentar caminhos padrão no Render e local
 if not oracle_client_path:
-    # Caminhos comuns no Render
+    # Caminhos comuns (Render e local)
     possible_paths = [
+        # Render - caminhos padrão
         os.path.expanduser("~/oracle/instantclient_21_13/instantclient_21_13"),
+        os.path.expanduser("~/oracle/instantclient_23_9/instantclient_23_9"),
         "/opt/render/project/src/oracle/instantclient_21_13",
+        "/opt/render/project/src/oracle/instantclient_23_9",
         os.path.expanduser("~/oracle/instantclient_21_13"),
+        os.path.expanduser("~/oracle/instantclient_23_9"),
+        # Local - projeto
+        os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "oracle", "instantclient_23_9"),
+        os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "oracle", "instantclient_21_13"),
+        # Local - venv (Windows)
+        os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "venv", "instantclient_23_9"),
     ]
     for path in possible_paths:
         if os.path.exists(path):
