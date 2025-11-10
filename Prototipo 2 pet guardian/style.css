@@ -1,0 +1,808 @@
+/* ---------- BASE GERAL ---------- */
+:root {
+  --turquesa: #00b8b8;
+  --laranja: #ff7a00;
+  --bg: #f8f9fa;
+  --text: #222;
+  --radius: 20px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ---------- LOGIN SCREEN ---------- */
+#loginScreen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(180deg, var(--turquesa) 0%, var(--laranja) 100%);
+  padding: 20px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 380px;
+  border-radius: var(--radius);
+  background: white;
+  overflow: hidden;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+  animation: fadeIn 0.6s ease;
+}
+
+.brand-top {
+  background: linear-gradient(90deg, var(--turquesa), var(--laranja));
+  color: white;
+  padding: 18px;
+}
+
+.logo-circle {
+  background: white;
+  color: var(--turquesa);
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.btn-login {
+  background: linear-gradient(90deg, var(--turquesa), var(--laranja));
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all .2s;
+}
+.btn-login:hover {
+  opacity: .9;
+}
+
+/* ---------- APP SCREEN ---------- */
+#appScreen {
+  background: var(--bg);
+  min-height: 100vh;
+  padding-bottom: 70px;
+}
+
+.logo-circle-sm {
+  background: linear-gradient(90deg, var(--turquesa), var(--laranja));
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.btn-accent {
+  background: linear-gradient(90deg, var(--turquesa), var(--laranja));
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.calendar-wrap {
+  padding-top: 25px;
+}
+
+#calendarGrid, #weekDays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+}
+
+#weekDays div {
+  font-weight: 600;
+  color: var(--turquesa);
+}
+
+#calendarGrid div {
+  background: white;
+  border-radius: 10px;
+  padding: 12px 0;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .2s;
+}
+
+#calendarGrid div:hover {
+  background: var(--laranja);
+  color: white;
+}
+
+/* ---------- SETTINGS SCREEN ---------- */
+#settingsScreen {
+  background: var(--bg);
+  min-height: 100vh;
+  padding-bottom: 70px;
+  animation: fadeIn 0.4s ease;
+}
+
+.list-group-item {
+  border: none;
+  border-bottom: 1px solid #eee;
+  padding: 14px 18px;
+  font-weight: 500;
+  color: #333;
+}
+.list-group-item i {
+  color: var(--turquesa);
+  font-size: 1.2rem;
+}
+
+/* ---------- BOTTOM NAV ---------- */
+#bottomNav, #bottomNavSettings {
+  border-top: 1px solid #ddd;
+  background: white;
+}
+
+.btn-nav {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: color .2s;
+}
+.btn-nav i {
+  font-size: 20px;
+  margin-bottom: 2px;
+}
+.btn-nav.active, .btn-nav:hover {
+  color: var(--laranja);
+}
+
+/* ---------- RESPONSIVIDADE ---------- */
+@media (max-width: 768px) {
+  .calendar-wrap {
+    padding: 15px;
+  }
+  .login-card {
+    max-width: 340px;
+  }
+  #calendarGrid div, #weekDays div {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-top h1 {
+    font-size: 20px;
+  }
+  #calendarGrid div {
+    padding: 10px 0;
+  }
+  .btn-login {
+    padding: 10px;
+  }
+}
+
+/* ---------- ANIMAÇÕES ----------*
+/* ---------- BASE GERAL ---------- */
+:root {
+  --turquesa: #00b8b8;
+  --laranja: #ff7a00;
+  --bg: #f8f9fa;
+  --text: #222;
+  --radius: 20px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ---------- LOGIN SCREEN ---------- */
+#loginScreen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(180deg, var(--turquesa) 0%, var(--laranja) 100%);
+  padding: 20px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 380px;
+  border-radius: var(--radius);
+  background: white;
+  overflow: hidden;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+  animation: fadeIn 0.6s ease;
+}
+
+.brand-top {
+  background: linear-gradient(90deg, var(--turquesa), var(--laranja));
+  color: white;
+  padding: 18px;
+}
+
+.logo-circle {
+  background: white;
+  color: var(--turquesa);
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.btn-login {
+  background: linear-gradient(90deg, var(--turquesa), var(--laranja));
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all .2s;
+}
+.btn-login:hover {
+  opacity: .9;
+}
+
+/* ---------- APP SCREEN ---------- */
+#appScreen {
+  background: var(--bg);
+  min-height: 100vh;
+  padding-bottom: 70px;
+}
+
+.logo-circle-sm {
+  background: linear-gradient(90deg, var(--turquesa), var(--laranja));
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.btn-accent {
+  background: linear-gradient(90deg, var(--turquesa), var(--laranja));
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.calendar-wrap {
+  padding-top: 25px;
+}
+
+#calendarGrid, #weekDays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+}
+
+#weekDays div {
+  font-weight: 600;
+  color: var(--turquesa);
+}
+
+#calendarGrid div {
+  background: white;
+  border-radius: 10px;
+  padding: 12px 0;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .2s;
+}
+
+#calendarGrid div:hover {
+  background: var(--laranja);
+  color: white;
+}
+
+/* ---------- SETTINGS SCREEN ---------- */
+#settingsScreen {
+  background: var(--bg);
+  min-height: 100vh;
+  padding-bottom: 70px;
+  animation: fadeIn 0.4s ease;
+}
+
+.list-group-item {
+  border: none;
+  border-bottom: 1px solid #eee;
+  padding: 14px 18px;
+  font-weight: 500;
+  color: #333;
+}
+.list-group-item i {
+  color: var(--turquesa);
+  font-size: 1.2rem;
+}
+
+/* ---------- BOTTOM NAV ---------- */
+#bottomNav, #bottomNavSettings {
+  border-top: 1px solid #ddd;
+  background: white;
+}
+
+.btn-nav {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: color .2s;
+}
+.btn-nav i {
+  font-size: 20px;
+  margin-bottom: 2px;
+}
+.btn-nav.active, .btn-nav:hover {
+  color: var(--laranja);
+}
+
+/* ---------- RESPONSIVIDADE ---------- */
+@media (max-width: 768px) {
+  .calendar-wrap {
+    padding: 15px;
+  }
+  .login-card {
+    max-width: 340px;
+  }
+  #calendarGrid div, #weekDays div {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-top h1 {
+    font-size: 20px;
+  }
+  #calendarGrid div {
+    padding: 10px 0;
+  }
+  .btn-login {
+    padding: 10px;
+  }
+}
+
+/* ---------- ANIMAÇÕES ----------*
+/* ---------- BASE GERAL ---------- */
+:root {
+  --turquesa: #00b8b8;
+  --laranja: #ff7a00;
+  --bg: #f8f9fa;
+  --text: #222;
+  --radius: 20px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ---------- LOGIN SCREEN ---------- */
+#loginScreen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(180deg, var(--turquesa) 0%, var(--laranja) 100%);
+  padding: 20px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 380px;
+  border-radius: var(--radius);
+  background: white;
+  overflow: hidden;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+  animation: fadeIn 0.6s ease;
+}
+
+.brand-top {
+  background: linear-gradient(90deg, var(--turquesa), var(--laranja));
+  color: white;
+  padding: 18px;
+}
+
+.logo-circle {
+  background: white;
+  color: var(--turquesa);
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.btn-login {
+  background: linear-gradient(90deg, var(--turquesa), var(--laranja));
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all .2s;
+}
+.btn-login:hover {
+  opacity: .9;
+}
+
+/* ---------- APP SCREEN ---------- */
+#appScreen {
+  background: var(--bg);
+  min-height: 100vh;
+  padding-bottom: 70px;
+}
+
+.logo-circle-sm {
+  background: linear-gradient(90deg, var(--turquesa), var(--laranja));
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.btn-accent {
+  background: linear-gradient(90deg, var(--turquesa), var(--laranja));
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.calendar-wrap {
+  padding-top: 25px;
+}
+
+#calendarGrid, #weekDays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+}
+
+#weekDays div {
+  font-weight: 600;
+  color: var(--turquesa);
+}
+
+#calendarGrid div {
+  background: white;
+  border-radius: 10px;
+  padding: 12px 0;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .2s;
+}
+
+#calendarGrid div:hover {
+  background: var(--laranja);
+  color: white;
+}
+
+/* ---------- SETTINGS SCREEN ---------- */
+#settingsScreen {
+  background: var(--bg);
+  min-height: 100vh;
+  padding-bottom: 70px;
+  animation: fadeIn 0.4s ease;
+}
+
+.list-group-item {
+  border: none;
+  border-bottom: 1px solid #eee;
+  padding: 14px 18px;
+  font-weight: 500;
+  color: #333;
+}
+.list-group-item i {
+  color: var(--turquesa);
+  font-size: 1.2rem;
+}
+
+/* ---------- BOTTOM NAV ---------- */
+#bottomNav, #bottomNavSettings {
+  border-top: 1px solid #ddd;
+  background: white;
+}
+
+.btn-nav {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: color .2s;
+}
+.btn-nav i {
+  font-size: 20px;
+  margin-bottom: 2px;
+}
+.btn-nav.active, .btn-nav:hover {
+  color: var(--laranja);
+}
+
+/* ---------- RESPONSIVIDADE ---------- */
+@media (max-width: 768px) {
+  .calendar-wrap {
+    padding: 15px;
+  }
+  .login-card {
+    max-width: 340px;
+  }
+  #calendarGrid div, #weekDays div {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-top h1 {
+    font-size: 20px;
+  }
+  #calendarGrid div {
+    padding: 10px 0;
+  }
+  .btn-login {
+    padding: 10px;
+  }
+}
+
+/* ---------- ANIMAÇÕES ----------*
+/* ---------- BASE GERAL ---------- */
+:root {
+  --turquesa: #00b8b8;
+  --laranja: #ff7a00;
+  --bg: #f8f9fa;
+  --text: #222;
+  --radius: 20px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ---------- LOGIN SCREEN ---------- */
+#loginScreen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(180deg, var(--turquesa) 0%, var(--laranja) 100%);
+  padding: 20px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 380px;
+  border-radius: var(--radius);
+  background: white;
+  overflow: hidden;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+  animation: fadeIn 0.6s ease;
+}
+
+.brand-top {
+  background: linear-gradient(90deg, var(--turquesa), var(--laranja));
+  color: white;
+  padding: 18px;
+}
+
+.logo-circle {
+  background: white;
+  color: var(--turquesa);
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.btn-login {
+  background: linear-gradient(90deg, var(--turquesa), var(--laranja));
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all .2s;
+}
+.btn-login:hover {
+  opacity: .9;
+}
+
+/* ---------- APP SCREEN ---------- */
+#appScreen {
+  background: var(--bg);
+  min-height: 100vh;
+  padding-bottom: 70px;
+}
+
+.logo-circle-sm {
+  background: linear-gradient(90deg, var(--turquesa), var(--laranja));
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.btn-accent {
+  background: linear-gradient(90deg, var(--turquesa), var(--laranja));
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.calendar-wrap {
+  padding-top: 25px;
+}
+
+#calendarGrid, #weekDays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+}
+
+#weekDays div {
+  font-weight: 600;
+  color: var(--turquesa);
+}
+
+#calendarGrid div {
+  background: white;
+  border-radius: 10px;
+  padding: 12px 0;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .2s;
+}
+
+#calendarGrid div:hover {
+  background: var(--laranja);
+  color: white;
+}
+
+/* ---------- SETTINGS SCREEN ---------- */
+#settingsScreen {
+  background: var(--bg);
+  min-height: 100vh;
+  padding-bottom: 70px;
+  animation: fadeIn 0.4s ease;
+}
+
+.list-group-item {
+  border: none;
+  border-bottom: 1px solid #eee;
+  padding: 14px 18px;
+  font-weight: 500;
+  color: #333;
+}
+.list-group-item i {
+  color: var(--turquesa);
+  font-size: 1.2rem;
+}
+
+/* ---------- BOTTOM NAV ---------- */
+#bottomNav, #bottomNavSettings {
+  border-top: 1px solid #ddd;
+  background: white;
+}
+
+.btn-nav {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: color .2s;
+}
+.btn-nav i {
+  font-size: 20px;
+  margin-bottom: 2px;
+}
+.btn-nav.active, .btn-nav:hover {
+  color: var(--laranja);
+}
+
+/* ---------- RESPONSIVIDADE ---------- */
+@media (max-width: 768px) {
+  .calendar-wrap {
+    padding: 15px;
+  }
+  .login-card {
+    max-width: 340px;
+  }
+  #calendarGrid div, #weekDays div {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-top h1 {
+    font-size: 20px;
+  }
+  #calendarGrid div {
+    padding: 10px 0;
+  }
+  .btn-login {
+    padding: 10px;
+  }
+}
+
+/* ---------- ANIMAÇÕES ----------*/
+ @keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
