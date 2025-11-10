@@ -1,7 +1,8 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Body
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from datetime import datetime, timedelta
 from models import Animal
+from pydantic import BaseModel
 import jwt
 import os
 from dotenv import load_dotenv
@@ -15,8 +16,8 @@ auth_router = APIRouter(tags=["Autenticação"])
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
-# Usuário fake
-fake_user = {"username": "admin", "password": "1234"}
+# Usuário hardcoded
+fake_user = {"username": "admin", "password": "admin1234"}
 
 def criar_token(dados: dict):
     expiracao = datetime.utcnow() + timedelta(hours=1)
@@ -29,7 +30,20 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()):
     if form_data.username != fake_user["username"] or form_data.password != fake_user["password"]:
         raise HTTPException(status_code=401, detail="Usuário ou senha inválidos")
     token = criar_token({"sub": form_data.username})
-    return {"access_token": token, "token_type": "bearer"}
+    return {"access_token": token, "token_type": "bearer", "username": form_data.username}
+
+# Modelo para login JSON
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+# Endpoint simples de login que aceita JSON (mais fácil para frontend)
+@auth_router.post("/login-json")
+def login_json(login_data: LoginRequest):
+    if login_data.username != fake_user["username"] or login_data.password != fake_user["password"]:
+        raise HTTPException(status_code=401, detail="Usuário ou senha inválidos")
+    token = criar_token({"sub": login_data.username})
+    return {"access_token": token, "token_type": "bearer", "username": login_data.username}
 
 @auth_router.get("/me")
 def perfil(token: str = Depends(oauth2_scheme)):

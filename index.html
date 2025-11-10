@@ -64,8 +64,28 @@
     </style>
 </head>
 <body>
+    <script>
+        // Verificar se está logado
+        if (!localStorage.getItem('token')) {
+            window.location.href = 'login.html';
+        }
+        
+        // Mostrar informações do usuário
+        const username = localStorage.getItem('username') || 'Usuário';
+        document.getElementById('userInfo').textContent = `Olá, ${username}`;
+        
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            window.location.href = 'login.html';
+        }
+    </script>
     <div class="container">
         <h1>🐾 Pet Guardian</h1>
+        <div style="text-align: right; margin-bottom: 20px;">
+            <span id="userInfo" style="color: #666; margin-right: 10px;"></span>
+            <button onclick="logout()" style="background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">Sair</button>
+        </div>
         <div class="menu">
             <a href="animais.html" class="menu-item">
                 <h2>Animais</h2>

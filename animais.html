@@ -164,6 +164,20 @@
     <script>
         const API_URL = 'https://apppetguardian.onrender.com';
         
+        // Verificar se está logado
+        if (!localStorage.getItem('token')) {
+            window.location.href = 'login.html';
+        }
+        
+        // Função para obter headers com autenticação
+        function getAuthHeaders() {
+            const token = localStorage.getItem('token');
+            return {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            };
+        }
+        
         function mostrarMensagem(texto, tipo) {
             const msg = document.getElementById('message');
             msg.textContent = texto;
@@ -177,7 +191,9 @@
             div.innerHTML = '<p>Carregando...</p>';
             
             try {
-                const response = await fetch(`${API_URL}/animais/`);
+                const response = await fetch(`${API_URL}/animais/`, {
+                    headers: getAuthHeaders()
+                });
                 if (!response.ok) throw new Error('Erro ao carregar');
                 
                 const animais = await response.json();
@@ -217,7 +233,7 @@
             try {
                 const response = await fetch(`${API_URL}/animais/`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: getAuthHeaders(),
                     body: JSON.stringify(data)
                 });
                 
