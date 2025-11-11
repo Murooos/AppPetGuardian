@@ -20,7 +20,10 @@ class DBHandler:
             db_password = os.getenv("DB_PASSWORD")
             
             if all([db_host, db_name, db_user, db_password]):
-                database_url = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+                # URL-encode a senha para evitar problemas com caracteres especiais
+                from urllib.parse import quote_plus
+                encoded_password = quote_plus(db_password)
+                database_url = f"postgresql://{db_user}:{encoded_password}@{db_host}:{db_port}/{db_name}"
             else:
                 raise Exception(
                     "DATABASE_URL não configurada. Configure DATABASE_URL ou as variáveis "
@@ -28,19 +31,14 @@ class DBHandler:
                 )
         
         try:
-            # Parse da URL para garantir compatibilidade
-            # O Render.com pode fornecer URLs com formato específico
-            parsed = urlparse(database_url)
+            # Conectar ao PostgreSQL usando a URL diretamente
+            # O psycopg2 aceita URLs no formato postgresql://
+            # Adicionar sslmode à URL se não estiver presente (Render.com requer SSL)
+            if 'sslmode' not in database_url.lower():
+                separator = '&' if '?' in database_url else '?'
+                database_url = f"{database_url}{separator}sslmode=require"
             
-            # Conectar ao PostgreSQL
-            self.conn = psycopg2.connect(
-                host=parsed.hostname,
-                port=parsed.port or 5432,
-                database=parsed.path[1:] if parsed.path else None,  # Remove a barra inicial
-                user=parsed.username,
-                password=parsed.password,
-                sslmode='require'  # Render.com requer SSL
-            )
+            self.conn = psycopg2.connect(database_url)
             
             # Configurar cursor para retornar dicionários
             self.cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)

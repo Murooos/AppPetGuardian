@@ -9,7 +9,8 @@ PyJWT==2.10.1
 python-multipart==0.0.9
 
 # Banco de Dados PostgreSQL
-psycopg2-binary==2.9.9
+# Usando versão mais recente que suporta Python 3.12
+psycopg2-binary>=2.9.9
 
 # Variáveis de Ambiente
 python-dotenv==1.0.1
