@@ -5,60 +5,21 @@ services:
     region: oregon
     plan: free
     buildCommand: |
-      apt-get update && apt-get install -y wget unzip libaio1 curl &&
       pip install --upgrade pip &&
-      pip install -r requirements.txt &&
-      # Verificar se o Oracle Client já está no projeto (oracle/instantclient_23_9)
-      if [ -d "oracle/instantclient_23_9" ]; then
-        echo "✅ Oracle Client encontrado no projeto (oracle/instantclient_23_9)"
-        export ORACLE_CLIENT_LIB_DIR=/opt/render/project/src/oracle/instantclient_23_9
-      elif [ -d "oracle/instantclient_21_13" ]; then
-        echo "✅ Oracle Client encontrado no projeto (oracle/instantclient_21_13)"
-        export ORACLE_CLIENT_LIB_DIR=/opt/render/project/src/oracle/instantclient_21_13
-      else
-        # Tentar baixar automaticamente
-        echo "📥 Baixando Oracle Instant Client..."
-        mkdir -p $HOME/oracle/instantclient_23_9 &&
-        cd $HOME/oracle/instantclient_23_9 &&
-        curl -L -o instantclient-basic.zip "https://download.oracle.com/otn_software/linux/instantclient/239000/instantclient-basic-linux.x64-23.9.0.23.10dbru.zip" || \
-        curl -L -o instantclient-basic.zip "https://download.oracle.com/otn_software/linux/instantclient/2113000/instantclient-basic-linux.x64-21.13.0.0.0dbru.zip" || \
-        (echo "⚠️  Não foi possível baixar o Oracle Client automaticamente. Faça upload manual em oracle/instantclient_23_9" && exit 0) &&
-        unzip -q instantclient-basic.zip && rm instantclient-basic.zip &&
-        echo "✅ Oracle Instant Client instalado em $HOME/oracle/instantclient_23_9/instantclient_23_9" &&
-        export ORACLE_CLIENT_LIB_DIR=$HOME/oracle/instantclient_23_9/instantclient_23_9
-      fi
+      pip install -r requirements.txt
     startCommand: |
       cd Backend/API &&
-      # Configurar caminho do Oracle Client (prioridade: projeto > home)
-      if [ -d "/opt/render/project/src/oracle/instantclient_23_9" ]; then
-        export ORACLE_CLIENT_LIB_DIR=/opt/render/project/src/oracle/instantclient_23_9
-      elif [ -d "/opt/render/project/src/oracle/instantclient_21_13" ]; then
-        export ORACLE_CLIENT_LIB_DIR=/opt/render/project/src/oracle/instantclient_21_13
-      elif [ -d "$HOME/oracle/instantclient_23_9/instantclient_23_9" ]; then
-        export ORACLE_CLIENT_LIB_DIR=$HOME/oracle/instantclient_23_9/instantclient_23_9
-      else
-        export ORACLE_CLIENT_LIB_DIR=$HOME/oracle/instantclient_21_13/instantclient_21_13
-      fi &&
-      export LD_LIBRARY_PATH=$ORACLE_CLIENT_LIB_DIR:$LD_LIBRARY_PATH &&
       python -m uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: PYTHON_VERSION
         value: 3.13.5
-      - key: ORACLE_DSN
-        sync: false
-      - key: ORACLE_USER
-        sync: false
-      - key: ORACLE_PASSWORD
-        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: pet-guardian-db
+          property: connectionString
       - key: JWT_SECRET_KEY
         sync: false
       - key: ALLOWED_ORIGINS
         sync: false
-        value: "*"  # Altere para a URL do Netlify após o deploy (ex: https://seu-site.netlify.app)
-      - key: ORACLE_CLIENT_LIB_DIR
-        sync: false
-        # Será definido automaticamente pelo startCommand
-      - key: LD_LIBRARY_PATH
-        sync: false
-        # Será definido automaticamente pelo startCommand
+        value: "https://pet-guardian.netlify.app"  # Altere para a URL do Netlify após o deploy (ex: https://seu-site.netlify.app)
 

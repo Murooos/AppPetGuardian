@@ -1,0 +1,59 @@
+========================================
+VARIÁVEIS DE AMBIENTE - AppPetGuardian
+========================================
+
+VARIÁVEIS PARA RENDER.COM (Produção)
+====================================
+
+POSTGRESQL (Banco de Dados)
+----------------------------
+DATABASE_URL=postgresql://petguardianuser:xc515UQKromm7JraX8M76YafzI6hhLyX@dpg-d497beemcj7s73ebag6g-a/petguardian
+
+OU (alternativa - variáveis individuais):
+DB_HOST=dpg-d497beemcj7s73ebag6g-a
+DB_PORT=5432
+DB_NAME=petguardian
+DB_USER=petguardianuser
+DB_PASSWORD=xc515UQKromm7JraX8M76YafzI6hhLyX
+
+AUTENTICAÇÃO
+------------
+JWT_SECRET_KEY=sua_chave_secreta_aqui
+
+CORS (Permissões de Origem)
+----------------------------
+ALLOWED_ORIGINS=*
+# OU para produção específica:
+# ALLOWED_ORIGINS=https://sua-url.netlify.app
+
+========================================
+VARIÁVEIS OBSOLETAS (Oracle - Remover)
+========================================
+
+Estas variáveis NÃO são mais necessárias após migração para PostgreSQL:
+
+❌ ORACLE_DSN
+❌ ORACLE_USER
+❌ ORACLE_PASSWORD
+❌ ORACLE_CLIENT_LIB_DIR
+❌ LD_LIBRARY_PATH
+
+========================================
+INSTRUÇÕES
+========================================
+
+1. Para desenvolvimento local:
+   - Copie o arquivo .env.example para .env
+   - Preencha os valores necessários
+
+2. Para produção no Render.com:
+   - Configure estas variáveis no dashboard do Render
+   - Vá em: Serviço Web → Environment → Add Environment Variable
+
+3. Segurança:
+   - NUNCA commite o arquivo .env no Git
+   - Use valores diferentes para desenvolvimento e produção
+   - Gere uma JWT_SECRET_KEY forte para produção
+
+========================================
+
