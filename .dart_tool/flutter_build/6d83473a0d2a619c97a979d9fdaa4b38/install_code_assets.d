@@ -1,0 +1,1 @@
+ C:\\Users\\skyli\\Documents\\Nova\ pasta\ (3)\\AppPetGuardian\\.dart_tool\\flutter_build\\6d83473a0d2a619c97a979d9fdaa4b38\\native_assets.json: 
