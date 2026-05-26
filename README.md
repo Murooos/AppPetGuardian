@@ -1,3 +1,5 @@
+![Texto Alternativo](Icon.png)
+
 # 🐾 Pet Guardian
 
 Aplicativo Flutter completo para tutores e clínicas veterinárias, com banco de dados SQLite local.
