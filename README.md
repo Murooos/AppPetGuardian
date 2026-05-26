@@ -47,6 +47,11 @@ flutter pub get
 # 3. Execute o app
 flutter run
 ```
+### Prints Mobile 
+![Texto Alternativo](Prints/home.jpg)
+![Texto Alternativo](Prints/tela1.jpg)
+![Texto Alternativo](Prints/tela2.jpg)
+![Texto Alternativo](Prints/tela3.jpg)
 
 
 ## 📦 Dependências Principais
